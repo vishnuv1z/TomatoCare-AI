@@ -1,71 +1,117 @@
-# TomatoCare AI
+# TomatoCare AI 🌿
 
-TomatoCare AI is a Streamlit prototype that classifies an uploaded tomato leaf image into one of 10 predefined classes with a trained TensorFlow/Keras model. The interface displays the predicted class, confidence, class probabilities, and general disease information.
+TomatoCare AI is a computer-vision web application built with **Streamlit** and **TensorFlow / Keras** for automated tomato leaf disease classification. The model analyzes uploaded leaf photos across 9 trained categories and provides immediate predictions, confidence scores, probability distributions, and plant health management guidance.
 
-Predictions are automated estimates and are not a professional agricultural diagnosis. Use a qualified local expert for decisions about crop treatment.
+---
 
-## Project files
+## 🌟 Key Features
+
+* **Instant Leaf Diagnosis**: Classifies tomato leaves into 9 distinct disease/healthy categories.
+* **Custom CNN Backbone**: Uses a custom 3-layer Convolutional Neural Network trained on 128×128 RGB images.
+* **Interactive Probability Breakdown**: Visualizes full model probability distribution for each prediction via Plotly charts.
+* **Management Guidance**: Displays concise disease descriptions, symptoms, and actionable management steps.
+* **Modern UI/UX**: Built with a clean dark theme, custom status badges, and sample leaf preview galleries.
+
+---
+
+## 📁 Project Structure
 
 ```text
-tomato-disease-project/
-├── app.py
-├── tomato_disease_model.keras   # Add your trained model here
-├── requirements.txt
-└── README.md
+ML project streamlit/
+├── model/
+│   ├── tomato_disease_cnn.h5      # Trained TensorFlow/Keras model (39.7 MB)
+│   └── image_model.ipynb          # Model training & evaluation notebook
+├── project/
+│   ├── app.py                     # Main Streamlit web application
+│   ├── requirements.txt           # Python dependencies
+│   ├── images/                    # Sample leaf images for UI preview
+│   └── .streamlit/                # Streamlit configuration
+├── .gitignore                     # Git ignore rules
+└── README.md                      # Project documentation
 ```
 
-The model file is not included. Place `tomato_disease_model.keras` in the same folder as `app.py` before running predictions.
+---
 
-## Windows setup in VS Code
+## 🏷️ Supported Leaf Categories (9 Classes)
 
-The provided requirements resolve for native Windows CPU use with Python 3.11. The TensorFlow wheel on native Windows is CPU-oriented; use WSL2 with the VS Code **WSL** extension if you need GPU acceleration. Python 3.10 or 3.11 is a practical starting point. Use a TensorFlow/Keras version compatible with the one that saved your `.keras` model.
+1. `Bacterial Spot` (`Tomato___Bacterial_spot`)
+2. `Early Blight` (`Tomato___Early_blight`)
+3. `Late Blight` (`Tomato___Late_blight`)
+4. `Leaf Mold` (`Tomato___Leaf_Mold`)
+5. `Septoria Leaf Spot` (`Tomato___Septoria_leaf_spot`)
+6. `Two-Spotted Spider Mites` (`Tomato___Spider_mites Two-spotted_spider_mite`)
+7. `Tomato Yellow Leaf Curl Virus` (`Tomato___Tomato_Yellow_Leaf_Curl_Virus`)
+8. `Tomato Mosaic Virus` (`Tomato___Tomato_mosaic_virus`)
+9. `Healthy` (`Tomato___healthy`)
 
-1. Open this project folder in VS Code and select a Python 3.11 interpreter.
-2. In the integrated PowerShell terminal, create and activate a virtual environment:
+---
 
-   ```powershell
-   py -3.11 -m venv .venv
-   .\.venv\Scripts\Activate.ps1
+## 📊 Model Specifications & Metrics
+
+| Parameter | Value |
+| :--- | :--- |
+| **Architecture** | Custom 3-layer Sequential CNN (`Conv2D` → `MaxPooling2D` → `Dense`) |
+| **Input Resolution** | `128 × 128 × 3` RGB |
+| **Model Accuracy** | **91%** |
+| **Precision** | **92%** |
+| **Recall** | **91%** |
+| **F1-Score** | **92%** |
+| **Evaluation Set** | 2,112 test set leaf images |
+
+---
+
+## 🚀 Local Installation & Setup
+
+### Prerequisites
+* **Python 3.10+** (Tested on Python 3.11 / 3.13)
+* **Git**
+
+### Steps
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/tomatocare-ai.git
+   cd "ML project streamlit/project"
    ```
 
-   For WSL2, use `python3 -m venv .venv` and `source .venv/bin/activate` instead.
+2. **Create and activate a virtual environment:**
+   * **Windows (PowerShell):**
+     ```powershell
+     python -m venv .venv
+     .\.venv\Scripts\Activate.ps1
+     ```
+   * **macOS / Linux:**
+     ```bash
+     python3 -m venv .venv
+     source .venv/bin/activate
+     ```
 
-3. Install the dependencies:
-
-   ```powershell
-   python -m pip install --upgrade pip
-   python -m pip install -r requirements.txt
+3. **Install dependencies:**
+   ```bash
+   pip install --upgrade pip
+   pip install -r requirements.txt
    ```
 
-4. Add `tomato_disease_model.keras` beside `app.py`.
-5. Start the application:
+4. **Ensure model file location:**
+   Verify `tomato_disease_cnn.h5` is located inside the `model/` folder.
 
-   ```powershell
+5. **Run the Streamlit application:**
+   ```bash
    streamlit run app.py
    ```
+   Open `http://localhost:8501` in your browser.
 
-Streamlit prints the local address in the terminal, usually `http://localhost:8501`.
+---
 
-## Model and preprocessing expectations
+## ☁️ Deploying to Streamlit Cloud
 
-- The model input is one RGB image with shape `224 × 224 × 3`.
-- The app resizes the image to `224 × 224` and applies `tf.keras.applications.mobilenet_v2.preprocess_input`, which scales pixel values to the range expected by MobileNetV2.
-- The training pipeline must have used the same preprocessing and the class order below. Update `CLASS_NAMES` in `app.py` if the model was trained with a different output order.
-- The classifier must return 10 scores in this order:
+1. Push your repository to **GitHub**.
+2. Go to [Streamlit Community Cloud](https://share.streamlit.io/) and log in with GitHub.
+3. Click **New App**, select your repo, set **Main file path** to `project/app.py`, and click **Deploy**!
 
-  1. `Tomato___Bacterial_spot`
-  2. `Tomato___Early_blight`
-  3. `Tomato___Late_blight`
-  4. `Tomato___Leaf_Mold`
-  5. `Tomato___Septoria_leaf_spot`
-  6. `Tomato___Spider_mites_Two-spotted_spider_mite`
-  7. `Tomato___Target_Spot`
-  8. `Tomato___Tomato_mosaic_virus`
-  9. `Tomato___Tomato_Yellow_Leaf_Curl_Virus`
-  10. `Tomato___healthy`
+---
 
-The model is loaded once with Streamlit's `st.cache_resource`. A missing model, invalid image, unsupported extension, incompatible output, or inference error is reported in the app instead of intentionally terminating the session.
+## 👥 Authors & Acknowledgments
 
-## Evaluation metrics
-
-The Model Information page leaves accuracy, precision, recall, and F1-score as `XX%` placeholders. Replace them with values calculated from a held-out evaluation set; this app does not claim model performance metrics.
+* Developed by **Group 9**
+* Built with Streamlit, TensorFlow, Keras, NumPy, Pillow, and Plotly.
